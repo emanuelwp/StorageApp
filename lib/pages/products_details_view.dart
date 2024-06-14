@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:untitled1/models/produto.dart';
+import 'package:untitled1/models/product.dart';
 
 class ProductDetailsView extends StatefulWidget {
-  final Produto product;
-
   const ProductDetailsView({super.key, required this.product});
+  final Product product;
 
   @override
   State<ProductDetailsView> createState() => _ProductDetailsViewState();
@@ -20,10 +19,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Divider(),
+          const Divider(),
           Text('Nome: ${widget.product.name}',
               style: const TextStyle(fontSize: 20)),
           Text('Fornecedor: ${widget.product.supplier}',
+              style: const TextStyle(fontSize: 16)),
+          Text('Categoria: ${widget.product.category}',
               style: const TextStyle(fontSize: 16)),
           Text('Quantidade: ${widget.product.quantity}',
               style: const TextStyle(fontSize: 16)),

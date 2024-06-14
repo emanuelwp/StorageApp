@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/pages/home_view.dart';
-import 'package:untitled1/pages/movimentations_view.dart';
+import 'package:untitled1/pages/suppliers_view.dart';
 import 'package:untitled1/pages/products_view.dart';
-import 'package:untitled1/pages/reports_view.dart';
+import 'package:untitled1/pages/categories_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -35,8 +35,8 @@ class _BasePageState extends State<BasePage> {
   final List<Widget> _pages = [
     const HomeView(),
     const ProductsView(),
-    const MovimentationsView(),
-    const ReportsView()
+    const SuppliersView(),
+    const CategoriesView()
   ];
 
   @override
@@ -67,12 +67,12 @@ class _BasePageState extends State<BasePage> {
             label: 'Produtos',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Movimentações',
+            icon: Icon(Icons.category),
+            label: 'Categorias',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Relatórios',
+            icon: Icon(Icons.store),
+            label: 'Fornecedores',
           ),
         ],
         selectedItemColor: Colors.amber[800],

@@ -1,8 +1,9 @@
-class Produto{
+class Product{
   String icon;
   String name;
   String supplier;
-  int id;
+  String category;
+  int cod;
   int quantity;
   int stockQuant;
   int showcaseQuant;
@@ -12,11 +13,12 @@ class Produto{
 
 
 
-  Produto({
+  Product({
     required this.icon,
     required this.name,
     required this.supplier,
-    required this.id,
+    required this.category,
+    required this.cod,
     required this.quantity,
     required this.stockQuant,
     required this.showcaseQuant,

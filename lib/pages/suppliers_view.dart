@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:untitled1/pages/product_create_view.dart';
-import 'package:untitled1/pages/products_details_view.dart';
-import 'package:untitled1/repositories/product_repository.dart';
+import 'package:untitled1/pages/supplier_create_view.dart';
+import 'package:untitled1/pages/suppliers_details_view.dart';
+import 'package:untitled1/repositories/supplier_repository.dart';
 
-class ProductsView extends StatefulWidget {
-  const ProductsView({super.key});
+class SuppliersView extends StatefulWidget {
+  const SuppliersView({super.key});
 
   @override
-  State<ProductsView> createState() => _ProductsViewState();
+  State<SuppliersView> createState() => _SuppliersViewState();
 }
 
-class _ProductsViewState extends State<ProductsView> {
+class _SuppliersViewState extends State<SuppliersView> {
   @override
   Widget build(BuildContext context) {
-    final tabela = ProductRepository.tabela;
+    final suppliers = SupplierRepository.suppliers;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -22,31 +22,31 @@ class _ProductsViewState extends State<ProductsView> {
           children: [
             const TextField(
               decoration: InputDecoration(
-                hintText: 'Digite o nome do produto...',
-                icon: Icon(Icons.search)
+                  hintText: 'Digite o nome do produto...',
+                  icon: Icon(Icons.search)
               ),
             ),
             const SizedBox(height: 16),
             DataTable(
               columns: const [
-                DataColumn(label: Text('Produto')),
-                DataColumn(label: Text('Fornecedor')),
-                DataColumn(label: Text('Quantidade')),
+                DataColumn(label: Text('Ícone')),
+                DataColumn(label: Text('Nome')),
+                DataColumn(label: Text('Email')),
               ],
-              rows: tabela.map((product) {
+              rows: suppliers.map((supplier) {
                 return DataRow(cells: [
-                  DataCell(Text(product.name)),
-                  DataCell(Text(product.supplier)),
+                  DataCell(Image.asset(supplier.icon)),
+                  DataCell(Text(supplier.name)),
                   DataCell(Row(
                     children: [
-                      Text('${product.quantity}'),
+                      Text(supplier.email),
                       IconButton(
                           onPressed: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        ProductDetailsView(product: product)));
+                                        SuppliersDetailsView(supplier: supplier)));
                           },
                           icon: const Icon(Icons.visibility))
                     ],
@@ -65,7 +65,7 @@ class _ProductsViewState extends State<ProductsView> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ProductCreateView(),
+              builder: (context) => const SupplierCreateView(),
             ),
           );
         },
