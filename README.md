@@ -1,6 +1,12 @@
-# untitled1
+# StorageAPP
 
-A new Flutter project.
+Projeto desenvolvido em Flutter para a disciplina PROGRAMAÇÃO PARA DISPOSITIVOS MÓVEIS.
+
+Esse projeto é um extensão do meu projeto da disciplina PROJETO INTEGRADOR, 
+na qual desenvolvi um sistema para gerenciamento de estoque para uma pequena papelaria.
+
+O presente projeto é um aplicativo de celular desenvolvido para o sistema citado anteriormente, com a finalidade de ter uma visão geral do estoque de uma maneira mais prática e facilitar na hora de adicionar um novo Produto, Fornecedor ou Categoria, tornando possível essa ação na palma da mão.
+
 
 ## Getting Started
 
