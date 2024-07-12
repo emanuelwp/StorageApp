@@ -1,8 +1,8 @@
+import 'package:StorageApp/pages/categories_view.dart';
+import 'package:StorageApp/pages/home_view.dart';
+import 'package:StorageApp/pages/products_view.dart';
+import 'package:StorageApp/pages/suppliers_view.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled1/pages/home_view.dart';
-import 'package:untitled1/pages/suppliers_view.dart';
-import 'package:untitled1/pages/products_view.dart';
-import 'package:untitled1/pages/categories_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -54,7 +54,7 @@ class _BasePageState extends State<BasePage> {
         currentIndex: _currentIndex,
         onTap: (int newIndex){
           setState(() {
-            _currentIndex = newIndex; //Atualiza o estado ao clicar no ícone
+            _currentIndex = newIndex;
           });
         },
         items: const [

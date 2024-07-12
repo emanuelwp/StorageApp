@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled1/models/supplier.dart';
+import '../models/supplier.dart';
 
 
 class SuppliersDetailsView extends StatefulWidget {
@@ -29,10 +29,6 @@ class _SuppliersDetailsViewState extends State<SuppliersDetailsView> {
               style: const TextStyle(fontSize: 16)),
           Text('CEP: ${widget.supplier.cep}',
               style: const TextStyle(fontSize: 16)),
-          SizedBox(
-            width: 50,
-            child: Image.asset(widget.supplier.icon),
-          )
         ]),
       ),
     );

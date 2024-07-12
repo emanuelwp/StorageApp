@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:untitled1/pages/supplier_create_view.dart';
-import 'package:untitled1/pages/suppliers_details_view.dart';
-import 'package:untitled1/repositories/supplier_repository.dart';
+import 'package:http/http.dart' as http;
+import '../api_service.dart';
+import '../models/supplier.dart';
+import 'supplier_create_view.dart';
+import 'suppliers_details_view.dart';
 
 class SuppliersView extends StatefulWidget {
   const SuppliersView({super.key});
@@ -11,12 +14,31 @@ class SuppliersView extends StatefulWidget {
 }
 
 class _SuppliersViewState extends State<SuppliersView> {
+  late Future<List<Supplier>> futureSuppliers;
+
+  @override
+  void initState() {
+    super.initState();
+    futureSuppliers = fetchSuppliers();
+  }
+
+  Future<List<Supplier>> fetchSuppliers() async {
+    final response = await http.get(Uri.parse('$apiUrl/suppliers'));
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Supplier> suppliers = body.map((dynamic item) => Supplier.fromJson(item)).toList();
+      return suppliers;
+    } else {
+      throw Exception('Failed to load suppliers');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tabela = SupplierRepository.tabela;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fornecedores',
+        title: const Text(
+          'Fornecedores',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -36,50 +58,62 @@ class _SuppliersViewState extends State<SuppliersView> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Nome')),
-                    DataColumn(label: Text('Email')),
-                    DataColumn(label: Text('')),
-                  ],
-                  rows: tabela.map((supplier) {
-                    return DataRow(cells: [
-                      DataCell(Container(
-                        alignment: Alignment.center,
-                        width: 75,
-                        child: Text(supplier.name),
-                      )),
-                      DataCell(Container(
-                        alignment: Alignment.center,
-                        width: 75,
-                        child: Text(supplier.email),
-                      )),
-                      DataCell(Container(
-                        alignment: Alignment.center,
-                        width: 75,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        SuppliersDetailsView(supplier: supplier),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.visibility),
-                            )
-                          ],
-                        ),
-                      )),
-                    ]);
-                  }).toList(),
-                ),
+              child: FutureBuilder<List<Supplier>>(
+                future: futureSuppliers,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text('Erro ao carregar fornecedores'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('Nenhum fornecedor encontrado'));
+                  } else {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(label: Text('Nome')),
+                          DataColumn(label: Text('Email')),
+                          DataColumn(label: Text('')),
+                        ],
+                        rows: snapshot.data!.map((supplier) {
+                          return DataRow(cells: [
+                            DataCell(Container(
+                              alignment: Alignment.center,
+                              width: 75,
+                              child: Text(supplier.name),
+                            )),
+                            DataCell(Container(
+                              alignment: Alignment.center,
+                              width: 75,
+                              child: Text(supplier.email),
+                            )),
+                            DataCell(Container(
+                              alignment: Alignment.center,
+                              width: 75,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SuppliersDetailsView(supplier: supplier),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.visibility),
+                                  )
+                                ],
+                              ),
+                            )),
+                          ]);
+                        }).toList(),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -95,7 +129,10 @@ class _SuppliersViewState extends State<SuppliersView> {
             ),
           );
         },
-        child: const Icon(Icons.add, color: Colors.black,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
     );
   }

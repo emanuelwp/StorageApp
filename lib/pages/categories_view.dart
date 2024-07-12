@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:untitled1/api_service.dart';
-import 'package:untitled1/pages/category_create_view.dart';
-import 'package:untitled1/pages/category_details_view.dart';
-import 'package:untitled1/models/category.dart';
-
-import '../repositories/category_repository.dart'; // Atualize o caminho de acordo com a sua estrutura de pastas
+import 'package:http/http.dart' as http;
+import '../api_service.dart';
+import '../models/category.dart';
+import 'category_create_view.dart';
+import 'category_details_view.dart';
 
 class CategoriesView extends StatefulWidget {
   const CategoriesView({super.key});
@@ -16,7 +14,15 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  static Future<List<Category>> fetchCategories() async {
+  late Future<List<Category>> futureCategories;
+
+  @override
+  void initState() {
+    super.initState();
+    futureCategories = fetchCategories();
+  }
+
+  Future<List<Category>> fetchCategories() async {
     final response = await http.get(Uri.parse('$apiUrl/categories'));
 
     if (response.statusCode == 200) {
@@ -54,7 +60,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Category>>(
-                future: fetchCategories(),
+                future: futureCategories,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -94,8 +100,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              CategoryDetailsView(category: category),
+                                          builder: (context) => CategoryDetailsView(category: category),
                                         ),
                                       );
                                     },

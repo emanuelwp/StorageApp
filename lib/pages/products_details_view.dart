@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled1/models/product.dart';
+import '../models/product.dart';
 
 class ProductDetailsView extends StatefulWidget {
   const ProductDetailsView({super.key, required this.product});
@@ -22,23 +22,19 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           const Divider(),
           Text('Nome: ${widget.product.name}',
               style: const TextStyle(fontSize: 20)),
-          Text('Categoria: ${widget.product.category}',
+          Text('Categoria: ${widget.product.categoryId}',
               style: const TextStyle(fontSize: 16)),
           Text('Quantidade: ${widget.product.quantity}',
               style: const TextStyle(fontSize: 16)),
-          Text('Quantidade em estoque ${widget.product.stockQuant}',
+          Text('Quantidade em estoque ${widget.product.stockQuantity}',
               style: const TextStyle(fontSize: 16)),
-          Text('Quantidade em vitrine ${widget.product.showcaseQuant}',
+          Text('Quantidade em vitrine ${widget.product.showcaseQuantity}',
               style: const TextStyle(fontSize: 16)),
-          Text('Quantidade mínima em estoque ${widget.product.stockQuantMin}',
+          Text('Quantidade mínima em estoque ${widget.product.minStockQuantity}',
               style: const TextStyle(fontSize: 16)),
           Text(
-              'Quantidade mínima em vitrine ${widget.product.showcaseQuantiMin}',
+              'Quantidade mínima em vitrine ${widget.product.minShowcaseQuantity}',
               style: const TextStyle(fontSize: 16)),
-          SizedBox(
-            width: 50,
-            child: Image.asset(widget.product.icon),
-          )
         ]),
       ),
     );
