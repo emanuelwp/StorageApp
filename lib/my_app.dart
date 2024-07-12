@@ -67,12 +67,12 @@ class _BasePageState extends State<BasePage> {
             label: 'Produtos',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: 'Categorias',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.store),
             label: 'Fornecedores',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: 'Categorias',
           ),
         ],
         selectedItemColor: Colors.amber[800],

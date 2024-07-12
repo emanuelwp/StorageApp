@@ -18,21 +18,31 @@ class SupplierCreateView extends StatelessWidget {
                 labelText: 'Nome do Fornecedor',
               ),
             ),
-            const TextField(
+            const SizedBox(height: 12),
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Fornecedor',
+                labelText: 'Email',
               ),
+              keyboardType: TextInputType.emailAddress,
             ),
-            const TextField(
+            const SizedBox(height: 12),
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Quantidade',
+                labelText: 'CNPJ',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'CEP',
               ),
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Lógica para salvar o novo produto
+                // Lógica para salvar o novo fornecedor
               },
               child: const Text('Salvar'),
             ),

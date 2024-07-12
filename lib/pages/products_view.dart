@@ -15,6 +15,14 @@ class _ProductsViewState extends State<ProductsView> {
   Widget build(BuildContext context) {
     final tabela = ProductRepository.tabela;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Produtos',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -23,39 +31,57 @@ class _ProductsViewState extends State<ProductsView> {
             const TextField(
               decoration: InputDecoration(
                 hintText: 'Digite o nome do produto...',
-                icon: Icon(Icons.search)
+                icon: Icon(Icons.search),
               ),
             ),
             const SizedBox(height: 16),
-            DataTable(
-              columns: const [
-                DataColumn(label: Text('Produto')),
-                DataColumn(label: Text('Fornecedor')),
-                DataColumn(label: Text('Quantidade')),
-              ],
-              rows: tabela.map((product) {
-                return DataRow(cells: [
-                  DataCell(Text(product.name)),
-                  DataCell(Text(product.supplier)),
-                  DataCell(Row(
-                    children: [
-                      Text('${product.quantity}'),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('Ícone')),
+                    DataColumn(label: Text('Produto')),
+                    DataColumn(label: Text('')),
+                  ],
+                  rows: tabela.map((product) {
+                    return DataRow(cells: [
+                      DataCell(Container(
+                        alignment: Alignment.center,
+                        width: 75,
+                        child: Image.asset(product.icon, height: 30, alignment: Alignment.centerLeft),
+                      )),
+                      DataCell(Container(
+                        alignment: Alignment.center,
+                        width: 75,
+                        child: Text(product.name),
+                      )),
+                      DataCell(Container(
+                        alignment: Alignment.center,
+                        width: 75,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
                                     builder: (context) =>
-                                        ProductDetailsView(product: product)));
-                          },
-                          icon: const Icon(Icons.visibility))
-                    ],
-                  )),
-                ]);
-              }).toList(),
+                                        ProductDetailsView(product: product),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.visibility),
+                            )
+                          ],
+                        ),
+                      )),
+                    ]);
+                  }).toList(),
+                ),
+              ),
             ),
-            const SizedBox(height: 16),
-            const Center(child: Text('1 de 1')), // Paginação
           ],
         ),
       ),

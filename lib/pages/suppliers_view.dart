@@ -13,8 +13,16 @@ class SuppliersView extends StatefulWidget {
 class _SuppliersViewState extends State<SuppliersView> {
   @override
   Widget build(BuildContext context) {
-    final suppliers = SupplierRepository.suppliers;
+    final tabela = SupplierRepository.tabela;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Fornecedores',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -22,40 +30,58 @@ class _SuppliersViewState extends State<SuppliersView> {
           children: [
             const TextField(
               decoration: InputDecoration(
-                  hintText: 'Digite o nome do produto...',
-                  icon: Icon(Icons.search)
+                hintText: 'Digite o nome do fornecedor...',
+                icon: Icon(Icons.search),
               ),
             ),
             const SizedBox(height: 16),
-            DataTable(
-              columns: const [
-                DataColumn(label: Text('Ícone')),
-                DataColumn(label: Text('Nome')),
-                DataColumn(label: Text('Email')),
-              ],
-              rows: suppliers.map((supplier) {
-                return DataRow(cells: [
-                  DataCell(Image.asset(supplier.icon)),
-                  DataCell(Text(supplier.name)),
-                  DataCell(Row(
-                    children: [
-                      Text(supplier.email),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('Nome')),
+                    DataColumn(label: Text('Email')),
+                    DataColumn(label: Text('')),
+                  ],
+                  rows: tabela.map((supplier) {
+                    return DataRow(cells: [
+                      DataCell(Container(
+                        alignment: Alignment.center,
+                        width: 75,
+                        child: Text(supplier.name),
+                      )),
+                      DataCell(Container(
+                        alignment: Alignment.center,
+                        width: 75,
+                        child: Text(supplier.email),
+                      )),
+                      DataCell(Container(
+                        alignment: Alignment.center,
+                        width: 75,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
                                     builder: (context) =>
-                                        SuppliersDetailsView(supplier: supplier)));
-                          },
-                          icon: const Icon(Icons.visibility))
-                    ],
-                  )),
-                ]);
-              }).toList(),
+                                        SuppliersDetailsView(supplier: supplier),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.visibility),
+                            )
+                          ],
+                        ),
+                      )),
+                    ]);
+                  }).toList(),
+                ),
+              ),
             ),
-            const SizedBox(height: 16),
-            const Center(child: Text('1 de 1')), // Paginação
           ],
         ),
       ),

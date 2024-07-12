@@ -1,7 +1,7 @@
 import 'package:untitled1/models/supplier.dart';
 
 class SupplierRepository {
-  static List<Supplier> suppliers = [
+  static List<Supplier> tabela = [
     Supplier(icon: './images/mattel,png',
         name: 'Mattel',
         email: 'mattel@gmail.com',

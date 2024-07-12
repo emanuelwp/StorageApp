@@ -22,8 +22,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           const Divider(),
           Text('Nome: ${widget.product.name}',
               style: const TextStyle(fontSize: 20)),
-          Text('Fornecedor: ${widget.product.supplier}',
-              style: const TextStyle(fontSize: 16)),
           Text('Categoria: ${widget.product.category}',
               style: const TextStyle(fontSize: 16)),
           Text('Quantidade: ${widget.product.quantity}',
