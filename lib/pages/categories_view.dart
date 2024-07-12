@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:untitled1/api_service.dart';
 import 'package:untitled1/pages/category_create_view.dart';
 import 'package:untitled1/pages/category_details_view.dart';
-import 'package:untitled1/repositories/category_repository.dart';
+import 'package:untitled1/models/category.dart';
+
+import '../repositories/category_repository.dart'; // Atualize o caminho de acordo com a sua estrutura de pastas
 
 class CategoriesView extends StatefulWidget {
   const CategoriesView({super.key});
@@ -11,12 +16,24 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
+  static Future<List<Category>> fetchCategories() async {
+    final response = await http.get(Uri.parse('$apiUrl/categories'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Category> categories = body.map((dynamic item) => Category.fromJson(item)).toList();
+      return categories;
+    } else {
+      throw Exception('Failed to load categories');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tabela = CategoryRepository.tabela;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categorias',
+        title: const Text(
+          'Categorias',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -36,50 +53,63 @@ class _CategoriesViewState extends State<CategoriesView> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Nome')),
-                    DataColumn(label: Text('Descrição')),
-                    DataColumn(label: Text('')),
-                  ],
-                  rows: tabela.map((category) {
-                    return DataRow(cells: [
-                      DataCell(Container(
-                        alignment: Alignment.center,
-                        width: 75,
-                        child: Text(category.name),
-                      )),
-                      DataCell(Container(
-                        alignment: Alignment.center,
-                        width: 75,
-                        child: Text(category.description),
-                      )),
-                      DataCell(Container(
-                        alignment: Alignment.center,
-                        width: 75,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryDetailsView(category: category),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.visibility),
-                            )
-                          ],
-                        ),
-                      )),
-                    ]);
-                  }).toList(),
-                ),
+              child: FutureBuilder<List<Category>>(
+                future: fetchCategories(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text('Erro ao carregar categorias'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('Nenhuma categoria encontrada'));
+                  } else {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(label: Text('Nome')),
+                          DataColumn(label: Text('Descrição')),
+                          DataColumn(label: Text('')),
+                        ],
+                        rows: snapshot.data!.map((category) {
+                          return DataRow(cells: [
+                            DataCell(Container(
+                              alignment: Alignment.center,
+                              width: 75,
+                              child: Text(category.name),
+                            )),
+                            DataCell(Container(
+                              alignment: Alignment.center,
+                              width: 75,
+                              child: Text(category.description),
+                            )),
+                            DataCell(Container(
+                              alignment: Alignment.center,
+                              width: 75,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategoryDetailsView(category: category),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.visibility),
+                                  )
+                                ],
+                              ),
+                            )),
+                          ]);
+                        }).toList(),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -95,7 +125,10 @@ class _CategoriesViewState extends State<CategoriesView> {
             ),
           );
         },
-        child: const Icon(Icons.add, color: Colors.black,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
     );
   }
